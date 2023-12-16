@@ -10,20 +10,25 @@ class AWGN:
     def __init__(self, modulate: Modulate, SNR: float, received_signal: np.ndarray):
         self.modulate = modulate
         self.SNR = SNR
-        self.N0 = 1 / (2 * self.modulate.Rb * self.SNR)  # AWGN噪声功率, N0 = 1 / (2 * Rb * SNR)
-        self.n = np.random.normal(0, np.sqrt(self.N0 / 2), self.modulate.N)
         self.received_signal = received_signal
-        self.y = self.received_signal + self.n
+
+    def P_signal(self) -> float:
+        """
+        计算信号功率
+        """
+        return np.sum(np.square(self.received_signal)) / self.modulate.N
 
     def noise(self) -> np.ndarray:
         """
         生成高斯白噪声
         """
-        return self.n
+        P_noise = self.P_signal() / (10 ** (self.SNR / 10))
+        noise = np.random.normal(0, np.sqrt(P_noise), self.modulate.N)
+        return noise
 
     def output(self) -> np.ndarray:
         """
         生成AWGN信道输出
         """
-        return self.y
+        return self.received_signal + self.noise()
 

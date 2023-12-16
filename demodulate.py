@@ -1,5 +1,4 @@
 from typing import List
-
 import numpy as np
 from modulate import Modulate
 from awgn import AWGN
@@ -33,7 +32,7 @@ class Demodulate:
         """
         乘法器
         """
-        return self.received_signal * self.base_vector()
+        return self.received_signal * self.base_vector() + self.awgn.noise()
 
     def integrator(self) -> np.ndarray:
         """
@@ -59,3 +58,10 @@ class Demodulate:
         解调器输出
         """
         return self.decision()
+
+    def error_rate(self) -> float:
+        """
+        计算误码率
+        """
+        y = self.output()
+        return np.sum(np.abs([y[i] - self.modulate.x[i] for i in range(self.modulate.Symbols)])) / self.modulate.Symbols

@@ -14,7 +14,7 @@ x = [0b1, 0b0, 0b0, 0b0, 0b1, 0b1, 0b1, 0b0, 0b1, 0b1, 0b1, 0b0]  # 输入二进
 Symbols = len(x)  # 二进制数据长度
 N = int(Symbols * sps)  # 采样点数
 t = np.arange(0, N) / fs  # 时间序列
-SNR = 10 * np.log10(1 / 0.01)  # 信噪比10 dB
+SNR = 10  # 信噪比10 dB
 
 
 def main():
